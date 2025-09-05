@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice for the Voiceless</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Voice for the Voiceless</h1>
+    </header>
+    <main>
+        <section id="home">
+            <p>Welcome to Voice for the Voiceless! Browse cute dog pictures and report injured animals.</p>
+            <div class="gallery">
+                <!-- Dog images will be loaded here via JS -->
+            </div>
+            <button id="report-btn">Report Injured Animal</button>
+        </section>
+        <section id="report" class="hidden">
+            <h2>Report Injured Animal</h2>
+            <form id="report-form">
+                <label for="location">Location (e.g., street address or coordinates):</label>
+                <input type="text" id="location" required>
+                
+                <label for="description">Description of the injury and animal:</label>
+                <textarea id="description" required></textarea>
+                
+                <label for="photo">Upload Photo:</label>
+                <input type="file" id="photo" accept="image/*" required>
+                <div id="photo-preview" class="hidden">
+                    <img id="preview-img" src="" alt="Photo Preview">
+                </div>
+                
+                <button type="submit">Submit Report</button>
+            </form>
+            <button id="back-btn">Back to Home</button>
+        </section>
+    </main>
+    <script src="script.js"></script>
+</body>
+</html>
