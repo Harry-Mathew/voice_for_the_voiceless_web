@@ -1,36 +1,76 @@
+<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Voice for the Voiceless</title>
-    <meta name="description" content="Voice for the Voiceless: Report injured animals and browse cute dog pictures to support animal rescue.">
-    <meta name="keywords" content="animal rescue, report injured animal, Voice for the Voiceless, dog pictures">
-    <meta name="Harry" content="Your Name">
     <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
     <header>
-        <h1>Voice for the Voiceless</h1>
+        <div class="header-container">
+            <h1>Voice for the Voiceless</h1>
+            <button id="report-btn">Report Injured Animal</button>
+        </div>
     </header>
     <main>
         <section id="home">
-            <p>Welcome to Voice for the Voiceless! Browse cute dog pictures and report injured animals.</p>
-            <div class="gallery">
-                <!-- Dog images will be loaded here via JS -->
+            <button id="get-location-btn">Get My Location to Filter Nearby</button>
+            <div id="status-message"></div>
+            <select id="sort-select">
+                <option value="severity-desc">Severity (High to Low)</option>
+                <option value="severity-asc">Severity (Low to High)</option>
+                <option value="survival-desc">Chance of Survival (High to Low)</option>
+                <option value="survival-asc">Chance of Survival (Low to High)</option>
+            </select>
+            <div id="animal-list" class="animal-list">
+                <!-- Animal cards will be loaded here via JS -->
             </div>
-            <button id="report-btn">Report Injured Animal</button>
         </section>
         <section id="report" class="hidden">
             <h2>Report Injured Animal</h2>
             <form id="report-form">
-                <label for="location">Location (e.g., street address or coordinates):</label>
-                <input type="text" id="location" required>
+                <label for="latitude">Latitude:</label>
+                <input type="number" id="latitude" step="any" required>
+                
+                <label for="longitude">Longitude:</label>
+                <input type="number" id="longitude" step="any" required>
+                
+                <button type="button" id="use-current-location">Use My Current Location</button>
                 
                 <label for="description">Description of the injury and animal:</label>
                 <textarea id="description" required></textarea>
+                
+                <label for="severity">Severity of Injury (1: least severe - 10: most severe):</label>
+                <select id="severity" required>
+                    <option value="">Select</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                </select>
+                
+                <label for="survival">Chance of Survival (1: least likely - 10: most likely):</label>
+                <select id="survival" required>
+                    <option value="">Select</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                </select>
                 
                 <label for="photo">Upload Photo:</label>
                 <input type="file" id="photo" accept="image/*" required>
