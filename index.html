@@ -11,11 +11,37 @@
     <header>
         <div class="header-container">
             <h1>Voice for the Voiceless</h1>
+            <div class="dropdown">
+                <button id="menu-btn">Menu</button>
+                <div id="dropdown-content" class="dropdown-content hidden">
+                    <a href="#">Contact Support</a>
+                    <a href="#">Phone: 123-456-7890</a>
+                    <a href="#">Email: support@voiceforthevoiceless.com</a>
+                </div>
+            </div>
             <button id="report-btn">Report Injured Animal</button>
         </div>
     </header>
     <main>
-        <section id="home">
+        <section id="auth-section" class="hidden">
+            <h2 id="auth-title"></h2>
+            <form id="auth-form">
+                <label for="email">Email:</label>
+                <input type="email" id="email" required>
+                
+                <label for="password">Password:</label>
+                <input type="password" id="password" required>
+                
+                <button type="submit" id="auth-submit"></button>
+                <button type="button" id="toggle-auth">Switch to Login/Signup</button>
+            </form>
+            <div id="verification-section" class="hidden">
+                <label for="code">Verification Code:</label>
+                <input type="text" id="code" required>
+                <button id="verify-btn">Verify</button>
+            </div>
+        </section>
+        <section id="home" class="hidden">
             <button id="get-location-btn">Get My Location to Filter Nearby</button>
             <div id="status-message"></div>
             <select id="sort-select">
@@ -27,60 +53,6 @@
             <div id="animal-list" class="animal-list">
                 <!-- Animal cards will be loaded here via JS -->
             </div>
-        </section>
-        <section id="report" class="hidden">
-            <h2>Report Injured Animal</h2>
-            <form id="report-form">
-                <label for="latitude">Latitude:</label>
-                <input type="number" id="latitude" step="any" required>
-                
-                <label for="longitude">Longitude:</label>
-                <input type="number" id="longitude" step="any" required>
-                
-                <button type="button" id="use-current-location">Use My Current Location</button>
-                
-                <label for="description">Description of the injury and animal:</label>
-                <textarea id="description" required></textarea>
-                
-                <label for="severity">Severity of Injury (1: least severe - 10: most severe):</label>
-                <select id="severity" required>
-                    <option value="">Select</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                    <option value="6">6</option>
-                    <option value="7">7</option>
-                    <option value="8">8</option>
-                    <option value="9">9</option>
-                    <option value="10">10</option>
-                </select>
-                
-                <label for="survival">Chance of Survival (1: least likely - 10: most likely):</label>
-                <select id="survival" required>
-                    <option value="">Select</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                    <option value="6">6</option>
-                    <option value="7">7</option>
-                    <option value="8">8</option>
-                    <option value="9">9</option>
-                    <option value="10">10</option>
-                </select>
-                
-                <label for="photo">Upload Photo:</label>
-                <input type="file" id="photo" accept="image/*" required>
-                <div id="photo-preview" class="hidden">
-                    <img id="preview-img" src="" alt="Photo Preview">
-                </div>
-                
-                <button type="submit">Submit Report</button>
-            </form>
-            <button id="back-btn">Back to Home</button>
         </section>
     </main>
     <script src="script.js"></script>

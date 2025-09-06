@@ -1,19 +1,14 @@
 /* style.css */
-html {
-    height: 100%;
-}
-
 body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
     background-color: #fff;
     color: #333;
-    height: 100%;
 }
 
 header {
-    background-color: #2196F3; /* Changed to blue */
+    background-color: #2196F3; /* Blue */
     color: white;
     text-align: center;
     padding: 1rem;
@@ -27,26 +22,38 @@ header {
     margin: 0 auto;
 }
 
+.dropdown {
+    position: relative;
+}
+
+.dropdown-content {
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    right: 0;
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-content a:hover {
+    background-color: #f1f1f1;
+}
+
 main {
     padding: 1rem;
     max-width: 1200px;
     margin: 0 auto;
 }
 
-#home {
-    min-height: 100vh;
-    background-image: url('https://pbs.twimg.com/media/Gz2WBL0XwAA7oNu.jpg');
-    background-size: cover;
-    background-position: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 2rem;
-    box-sizing: border-box;
-}
-
 #get-location-btn {
-    background-color: #2196F3; /* Blue */
+    background-color: #2196F3;
     color: white;
     border: none;
     padding: 0.8rem 1.5rem;
@@ -58,16 +65,13 @@ main {
 }
 
 #get-location-btn:hover {
-    background-color: #1E88E5; /* Darker blue */
+    background-color: #1E88E5;
 }
 
 #status-message {
     text-align: center;
     font-weight: bold;
     margin-bottom: 1rem;
-    background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent for readability */
-    padding: 0.5rem;
-    border-radius: 4px;
 }
 
 #sort-select {
@@ -75,23 +79,19 @@ main {
     margin: 1rem auto;
     padding: 0.5rem;
     font-size: 1rem;
-    background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent */
-    border: 1px solid #ccc;
-    border-radius: 4px;
 }
 
 .animal-list {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 1rem;
-    width: 100%;
 }
 
 .animal-card {
     border: 1px solid #ccc;
     border-radius: 8px;
     padding: 1rem;
-    background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent for readability on background */
+    background-color: #f9f9f9;
 }
 
 .animal-card img {
@@ -106,7 +106,7 @@ main {
 }
 
 button {
-    background-color: #2196F3; /* Changed to blue */
+    background-color: #2196F3;
     color: white;
     border: none;
     padding: 0.8rem 1.5rem;
@@ -117,24 +117,24 @@ button {
 }
 
 button:hover {
-    background-color: #1E88E5; /* Darker blue */
+    background-color: #1E88E5;
 }
 
 .hidden {
     display: none;
 }
 
-#report form {
+#report form, #auth-form {
     display: flex;
     flex-direction: column;
     gap: 1rem;
 }
 
-#report label {
+#report label, #auth-form label {
     font-weight: bold;
 }
 
-#report input, #report textarea, #report select {
+#report input, #report textarea, #report select, #auth-form input {
     padding: 0.5rem;
     border: 1px solid #ccc;
     border-radius: 4px;
@@ -152,9 +152,22 @@ button:hover {
 }
 
 #use-current-location {
-    background-color: #2196F3; /* Blue */
+    background-color: #2196F3;
 }
 
 #use-current-location:hover {
-    background-color: #1E88E5; /* Darker blue */
+    background-color: #1E88E5;
+}
+
+#auth-section {
+    max-width: 400px;
+    margin: 2rem auto;
+    padding: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+}
+
+#verification-section {
+    margin-top: 1rem;
 }

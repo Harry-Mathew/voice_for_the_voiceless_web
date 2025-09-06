@@ -1,11 +1,18 @@
-// script.js
+// script.js (for index.html)
 document.addEventListener('DOMContentLoaded', () => {
     let userLat = null;
     let userLon = null;
     let reports = JSON.parse(localStorage.getItem('reports')) || [];
+    let user = JSON.parse(localStorage.getItem('user')) || null;
+    let verificationCode = null;
+
+    // Clean up old reports
+    reports = reports.filter(report => Date.now() - report.timestamp < 24 * 60 * 60 * 1000);
+    localStorage.setItem('reports', JSON.stringify(reports));
 
     // Add some fake initial reports if none exist (for demo purposes)
     if (reports.length === 0) {
+        const now = Date.now();
         reports = [
             {
                 latitude: 37.7749,
@@ -13,7 +20,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 description: 'Injured dog with a limp near Golden Gate Park',
                 severity: 7,
                 survival: 8,
-                photo: null
+                photo: null,
+                timestamp: now
             },
             {
                 latitude: 37.7833,
@@ -21,7 +29,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 description: 'Cat with scratches in downtown area',
                 severity: 5,
                 survival: 6,
-                photo: null
+                photo: null,
+                timestamp: now
             },
             {
                 latitude: 37.7694,
@@ -29,30 +38,114 @@ document.addEventListener('DOMContentLoaded', () => {
                 description: 'Bird with broken wing in Presidio',
                 severity: 9,
                 survival: 4,
-                photo: null
+                photo: null,
+                timestamp: now
             }
         ];
         localStorage.setItem('reports', JSON.stringify(reports));
     }
 
+    const authSection = document.getElementById('auth-section');
     const homeSection = document.getElementById('home');
-    const reportSection = document.getElementById('report');
+    const authTitle = document.getElementById('auth-title');
+    const authForm = document.getElementById('auth-form');
+    const authSubmit = document.getElementById('auth-submit');
+    const toggleAuth = document.getElementById('toggle-auth');
+    const verificationSection = document.getElementById('verification-section');
+    const verifyBtn = document.getElementById('verify-btn');
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+    const codeInput = document.getElementById('code');
     const reportBtn = document.getElementById('report-btn');
-    const backBtn = document.getElementById('back-btn');
-    const reportForm = document.getElementById('report-form');
-    const photoInput = document.getElementById('photo');
-    const previewDiv = document.getElementById('photo-preview');
-    const previewImg = document.getElementById('preview-img');
-    const latitudeInput = document.getElementById('latitude');
-    const longitudeInput = document.getElementById('longitude');
-    const descriptionInput = document.getElementById('description');
-    const severitySelect = document.getElementById('severity');
-    const survivalSelect = document.getElementById('survival');
+    const menuBtn = document.getElementById('menu-btn');
+    const dropdownContent = document.getElementById('dropdown-content');
     const animalList = document.getElementById('animal-list');
     const sortSelect = document.getElementById('sort-select');
     const getLocationBtn = document.getElementById('get-location-btn');
     const statusMessage = document.getElementById('status-message');
-    const useCurrentLocationBtn = document.getElementById('use-current-location');
+
+    let isSignup = true;
+
+    function showAuth() {
+        authSection.classList.remove('hidden');
+        homeSection.classList.add('hidden');
+        reportBtn.disabled = true;
+        if (isSignup) {
+            authTitle.textContent = 'Sign Up';
+            authSubmit.textContent = 'Sign Up';
+            toggleAuth.textContent = 'Switch to Login';
+        } else {
+            authTitle.textContent = 'Login';
+            authSubmit.textContent = 'Login';
+            toggleAuth.textContent = 'Switch to Signup';
+        }
+    }
+
+    function showHome() {
+        authSection.classList.add('hidden');
+        homeSection.classList.remove('hidden');
+        reportBtn.disabled = false;
+        renderList();
+    }
+
+    if (!user || !user.verified) {
+        showAuth();
+    } else {
+        showHome();
+    }
+
+    authForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const email = emailInput.value;
+        const password = passwordInput.value;
+
+        if (isSignup) {
+            // Simulate signup
+            user = { email, password, verified: false };
+            localStorage.setItem('user', JSON.stringify(user));
+            // Generate verification code
+            verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
+            alert(`Verification code sent to ${email}: ${verificationCode} (In a real app, this would be emailed.)`);
+            verificationSection.classList.remove('hidden');
+        } else {
+            // Login
+            if (user && user.email === email && user.password === password && user.verified) {
+                showHome();
+            } else {
+                alert('Invalid credentials or not verified.');
+            }
+        }
+    });
+
+    verifyBtn.addEventListener('click', () => {
+        if (codeInput.value === verificationCode) {
+            user.verified = true;
+            localStorage.setItem('user', JSON.stringify(user));
+            alert('Email verified!');
+            verificationSection.classList.add('hidden');
+            showHome();
+        } else {
+            alert('Invalid code.');
+        }
+    });
+
+    toggleAuth.addEventListener('click', () => {
+        isSignup = !isSignup;
+        verificationSection.classList.add('hidden');
+        showAuth();
+    });
+
+    menuBtn.addEventListener('click', () => {
+        dropdownContent.classList.toggle('hidden');
+    });
+
+    reportBtn.addEventListener('click', () => {
+        if (user && user.verified) {
+            window.location.href = 'report.html';
+        } else {
+            alert('Please log in or sign up first.');
+        }
+    });
 
     // Function to calculate distance using Haversine formula
     function getDistance(lat1, lon1, lat2, lon2) {
@@ -125,83 +218,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Initial render
-    renderList();
-
-    // Event listeners
-    reportBtn.addEventListener('click', () => {
-        homeSection.classList.add('hidden');
-        reportSection.classList.remove('hidden');
-    });
-
-    backBtn.addEventListener('click', () => {
-        reportSection.classList.add('hidden');
-        homeSection.classList.remove('hidden');
-        reportForm.reset();
-        previewDiv.classList.add('hidden');
-        renderList(); // Refresh list on back
-    });
-
-    photoInput.addEventListener('change', (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = (event) => {
-                previewImg.src = event.target.result;
-                previewDiv.classList.remove('hidden');
-            };
-            reader.readAsDataURL(file);
-        }
-    });
-
-    useCurrentLocationBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-                latitudeInput.value = position.coords.latitude;
-                longitudeInput.value = position.coords.longitude;
-            },
-            (error) => {
-                alert(`Error getting location: ${error.message}`);
-            }
-        );
-    });
-
-    reportForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const latitude = parseFloat(latitudeInput.value);
-        const longitude = parseFloat(longitudeInput.value);
-        const description = descriptionInput.value;
-        const severity = parseInt(severitySelect.value);
-        const survival = parseInt(survivalSelect.value);
-        let photoBase64 = null;
-
-        if (photoInput.files.length > 0) {
-            const file = photoInput.files[0];
-            const reader = new FileReader();
-            reader.onload = (event) => {
-                photoBase64 = event.target.result;
-                saveReport(latitude, longitude, description, severity, survival, photoBase64);
-            };
-            reader.readAsDataURL(file);
-        } else {
-            saveReport(latitude, longitude, description, severity, survival, photoBase64);
-        }
-    });
-
-    function saveReport(latitude, longitude, description, severity, survival, photo) {
-        if (!isNaN(latitude) && !isNaN(longitude) && description && !isNaN(severity) && !isNaN(survival)) {
-            reports.push({ latitude, longitude, description, severity, survival, photo });
-            localStorage.setItem('reports', JSON.stringify(reports));
-            alert('Report submitted successfully! Thank you for helping.');
-            reportForm.reset();
-            previewDiv.classList.add('hidden');
-            reportSection.classList.add('hidden');
-            homeSection.classList.remove('hidden');
-            renderList();
-        } else {
-            alert('Please fill all fields correctly.');
-        }
+    if (user && user.verified) {
+        renderList();
     }
 
     sortSelect.addEventListener('change', renderList);
