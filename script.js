@@ -1,12 +1,14 @@
 // script.js (for index.html)
 document.addEventListener('DOMContentLoaded', () => {
+    emailjs.init("YOUR_EMAILJS_USER_ID"); // Replace with your EmailJS User ID
+
     let userLat = null;
     let userLon = null;
     let reports = JSON.parse(localStorage.getItem('reports')) || [];
     let user = JSON.parse(localStorage.getItem('user')) || null;
     let verificationCode = null;
 
-    // Clean up old reports
+    // Clean up old reports (24 hours)
     reports = reports.filter(report => Date.now() - report.timestamp < 24 * 60 * 60 * 1000);
     localStorage.setItem('reports', JSON.stringify(reports));
 
@@ -105,8 +107,17 @@ document.addEventListener('DOMContentLoaded', () => {
             localStorage.setItem('user', JSON.stringify(user));
             // Generate verification code
             verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
-            alert(`Verification code sent to ${email}: ${verificationCode} (In a real app, this would be emailed.)`);
-            verificationSection.classList.remove('hidden');
+            // Send email with EmailJS
+            emailjs.send("service_bvctqwr", "template_pij5e3r", {
+                to_email: email,
+                code: verificationCode
+            })
+            .then(function(response) {
+                alert('Verification code sent to your email! Check your inbox/spam.');
+                verificationSection.classList.remove('hidden');
+            }, function(error) {
+                alert('Failed to send verification email: ' + JSON.stringify(error));
+            });
         } else {
             // Login
             if (user && user.email === email && user.password === password && user.verified) {
