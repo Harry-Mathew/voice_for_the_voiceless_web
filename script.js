@@ -1,6 +1,6 @@
 // script.js (for index.html)
 document.addEventListener('DOMContentLoaded', () => {
-    emailjs.init("YOUR_EMAILJS_USER_ID"); // Replace with your EmailJS User ID
+    emailjs.init("UodTzBDHedXsXM1F1"); // Replace with your EmailJS User ID
 
     let userLat = null;
     let userLon = null;
@@ -183,9 +183,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (userLat !== null && userLon !== null) {
             filteredReports = reports.filter(report => {
                 const dist = getDistance(userLat, userLon, report.latitude, report.longitude);
-                return dist <= 10; // 10 km radius
+                return dist <= 50; // 50 km radius
             });
-            statusMessage.textContent = filteredReports.length > 0 ? 'Showing injured animals within 10km' : 'No injured animals nearby';
+            statusMessage.textContent = filteredReports.length > 0 ? 'Showing injured animals within 50km' : 'No injured animals nearby';
         } else {
             statusMessage.textContent = 'Showing all reported injured animals';
         }
